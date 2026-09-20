@@ -1,23 +1,24 @@
 package com.matheus.controlepedidosrecursos.service.serviceImpl;
 
-import com.matheus.controlepedidosrecursos.dto.FuncionarioDTO;
-import com.matheus.controlepedidosrecursos.dto.ProdutoDTO;
 import com.matheus.controlepedidosrecursos.dto.SolicitacaoDTO;
 import com.matheus.controlepedidosrecursos.enums.StatusSolicitacaoEnum;
-import com.matheus.controlepedidosrecursos.exception.FuncionarioIdInvalido;
+import com.matheus.controlepedidosrecursos.exception.FuncionarioIdInvalidoException;
 import com.matheus.controlepedidosrecursos.exception.SetorComSolicitacaoPendenteException;
-import com.matheus.controlepedidosrecursos.exception.SoliciacaoIdInvalido;
 import com.matheus.controlepedidosrecursos.model.FuncionarioModel;
-import com.matheus.controlepedidosrecursos.model.ProdutoModel;
+import com.matheus.controlepedidosrecursos.model.ProdutoSolicitadoModel;
 import com.matheus.controlepedidosrecursos.model.SolicitacaoModel;
 import com.matheus.controlepedidosrecursos.repository.FuncionarioRepository;
 import com.matheus.controlepedidosrecursos.repository.ProdutoRepository;
+import com.matheus.controlepedidosrecursos.repository.ProdutoSolicitadoRepository;
 import com.matheus.controlepedidosrecursos.repository.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SolicitacaoServiceImpl {
@@ -29,10 +30,10 @@ public class SolicitacaoServiceImpl {
     FuncionarioRepository funcionarioRepository;
 
     @Autowired
-    ProdutoRepository produtoRepository;
+    ProdutoSolicitadoRepository produtoSolicitadoRepositoryRepository;
 
     public SolicitacaoDTO solicitarRecurso(Long idFuncionario, SolicitacaoDTO solicitacaoDTO) {
-        FuncionarioModel existFuncionario = funcionarioRepository.findById(idFuncionario).orElseThrow(() -> new FuncionarioIdInvalido("ID - Funcionario não encontrado"));
+        FuncionarioModel existFuncionario = funcionarioRepository.findById(idFuncionario).orElseThrow(() -> new FuncionarioIdInvalidoException("ID - Funcionario não encontrado"));
 
 
         boolean verificacaoSetorBySolicitacao = solicitacaoRepository.existsBySetorRecebimentoAndStatusSolicitacao(solicitacaoDTO.getSetorRecebimento(), StatusSolicitacaoEnum.PENDENTE);
@@ -40,30 +41,31 @@ public class SolicitacaoServiceImpl {
             throw new SetorComSolicitacaoPendenteException("Setor já tem uma solicitação pendente!");
         }
 
-
-        SolicitacaoModel solicitacaoRecurso = SolicitacaoModel.builder()
+        SolicitacaoModel solicitacaoModel = SolicitacaoModel.builder()
                 .funcionarioSolicitacao(existFuncionario)
+                .dataSolicitacao(solicitacaoDTO.getDataSolicitacao())
                 .setorRecebimento(solicitacaoDTO.getSetorRecebimento())
                 .statusSolicitacao(StatusSolicitacaoEnum.PENDENTE)
-                .dataSolicitacao(LocalDateTime.now())
-                .produtosSolicitados(solicitacaoDTO.getProdutosSolicitados())
                 .build();
 
 
-        List<ProdutoModel> produtosProcessamento = solicitacaoRecurso.getProdutosSolicitados();
-        List<ProdutoModel> produtosSalvos = produtoRepository.saveAll(produtosProcessamento);
-        SolicitacaoModel solicitacaoSalva = solicitacaoRepository.save(solicitacaoRecurso);
+        BigDecimal valorTotal = solicitacaoModel.getProdutosSolicitados().stream().map(ProdutoSolicitadoModel::getValorProduto).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        List<ProdutoSolicitadoModel> produtoSolicitadoSalvo = produtoSolicitadoRepositoryRepository.saveAll(solicitacaoModel.getProdutosSolicitados());
+        SolicitacaoModel solicitacalSalva = solicitacaoRepository.save(solicitacaoModel);
 
         SolicitacaoDTO solicitacaoDtoCliente = SolicitacaoDTO.builder()
-                .id(solicitacaoRecurso.getId())
+                .id(solicitacalSalva.getId())
                 .funcionarioSolicitacao(existFuncionario)
-                .setorRecebimento(solicitacaoRecurso.getSetorRecebimento())
-                .statusSolicitacao(StatusSolicitacaoEnum.PENDENTE)
                 .dataSolicitacao(LocalDateTime.now())
-                .produtosSolicitados(solicitacaoRecurso.getProdutosSolicitados())
+                .setorRecebimento(solicitacalSalva.getSetorRecebimento())
+                .statusSolicitacao(StatusSolicitacaoEnum.PENDENTE)
+                .valorTotalSolicitacao(valorTotal)
                 .build();
 
+
         return solicitacaoDtoCliente;
+
 
     }
 }

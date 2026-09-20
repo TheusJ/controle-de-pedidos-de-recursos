@@ -1,20 +1,10 @@
 package com.matheus.controlepedidosrecursos.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.util.List;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "tb_produto")
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProdutoModel {
 
     @Id
@@ -23,9 +13,7 @@ public class ProdutoModel {
 
     private String nome;
 
-    private BigDecimal valorProduto;
-
-    private Integer quantidades;
-
-
+    @Column(unique = true)
+    @Pattern(regexp = "^[A-Z]{3}-[A-Z]{4}-\\d{2}$", message = "O sku do produto deve seguir o padrão AAA-AAAA-00")
+    private String sku;
 }

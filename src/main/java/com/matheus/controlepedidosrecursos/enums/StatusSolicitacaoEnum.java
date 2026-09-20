@@ -2,7 +2,9 @@ package com.matheus.controlepedidosrecursos.enums;
 
 public enum StatusSolicitacaoEnum {
     PENDENTE("PENDENTE"),
-    APROVADA("APROVADA"),
+    APROVADO("APROVADO"),
+    REJEITADO("REJEITADO"),
+    ENTREGUE("ENTREGUE"),
     CANCELADA("CANCELADA");
 
     StatusSolicitacaoEnum(String status){

@@ -1,5 +1,6 @@
 package com.matheus.controlepedidosrecursos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matheus.controlepedidosrecursos.enums.SetoresEnum;
 import com.matheus.controlepedidosrecursos.enums.StatusSolicitacaoEnum;
 import jakarta.persistence.*;
@@ -7,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SolicitacaoModel {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "solicitacao_id")
+    @JoinColumn(name = "solicitante_id")
     private FuncionarioModel funcionarioSolicitacao;
 
 
@@ -40,5 +40,9 @@ public class SolicitacaoModel {
     private LocalDateTime dataCancelamento;
 
     @OneToMany
-    private List<ProdutoModel> produtosSolicitados;
+    private List<ProdutoSolicitadoModel> produtosSolicitados;
+
+    @ManyToOne
+    @JoinColumn(name = "aprovador_id")
+    private FuncionarioModel funcionarioAprovador;
 }

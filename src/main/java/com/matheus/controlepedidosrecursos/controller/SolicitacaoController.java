@@ -20,4 +20,9 @@ public class SolicitacaoController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitacaoModel);
     }
+
+    @GetMapping
+    public ResponseEntity<SolicitacaoDTO> buscarSolicitacao(@PathVariable Long funcionarioId){
+        return null;
+    }
 }

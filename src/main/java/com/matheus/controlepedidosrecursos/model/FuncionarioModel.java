@@ -23,10 +23,10 @@ public class FuncionarioModel {
 
     private String nome;
 
-    @CPF
+
     private String cpf;
 
-    @Email
+
     private String email;
 
 

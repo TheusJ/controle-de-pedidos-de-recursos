@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<ProdutoSolicitadoModel, Long> {
+public interface ProdutoSolicitadoRepository extends JpaRepository<ProdutoSolicitadoModel, Long> {
+
+    ProdutoSolicitadoModel findByNome(String nome);
 }
