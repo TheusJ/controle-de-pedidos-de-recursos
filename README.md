@@ -8,12 +8,13 @@ simulando uma solução para um problema real do setor de logística.
 
 # Contexto e motivação
 
-Atualmente, atuando no setor de Logística, identifiquei a necessidade 
-recorrente de um sistema para a solicitação e gestão de recursos
-internos entre os diferentes departamentos da empresa.
+Atualmente, como trabalho no setor de Logística, identifiquei 
+a necessidade recorrente de um sistema para a solicitação
+e gestão de recursos internos entre os diferentes departamentos
+da empresa.
 
 Atraves dessa demanda do dia a dia, decidi projetar e desenvolver
-esta aplicação backend como um estudo prático de caso. 
+esta aplicação backend como um estudo prático caso. 
 
 O foco principal é fazer uma solução funcional que tenha:
 
