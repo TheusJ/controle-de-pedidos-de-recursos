@@ -45,6 +45,10 @@ A API é documentada com **OpenAPI 3** usando o [springdoc-openapi](https://spri
 
 ### Regras de negócio documentadas
 
+Aqui ficará a documentação desta aplicação.
+Lembrando que, esta aplicação está sendo atualizada constantemente.
+Ou seja, possa ser que de tempos em tempos terá uma nova atualização na documentação.
+
 **Cadastrar Funcionário**
 - Apenas funcionários com cargo **RH** podem cadastrar novos funcionários.
 - Os dados são validados (CPF, e-mail, campos obrigatórios); dados inválidos geram exceção.
