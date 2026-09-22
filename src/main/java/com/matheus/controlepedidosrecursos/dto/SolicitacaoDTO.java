@@ -36,7 +36,7 @@ public class SolicitacaoDTO {
     private LocalDateTime dataSolicitacao;
 
     @Enumerated(EnumType.STRING)
-    private SetoresEnum setorRecebimento;
+    private SetoresEnum setorSolicitacao;
 
     @Enumerated(EnumType.STRING)
     private StatusSolicitacaoEnum statusSolicitacao;
@@ -44,7 +44,10 @@ public class SolicitacaoDTO {
     @JsonFormat(pattern = "DD/mm/yyy HH:mm:ss")
     private LocalDateTime dataCancelamento;
 
+
     private BigDecimal valorTotalSolicitacao;
 
     private FuncionarioModel funcionarioAprovador;
+
+    private List<ProdutoSolicitadoModel> produtosSolicitados;
 }

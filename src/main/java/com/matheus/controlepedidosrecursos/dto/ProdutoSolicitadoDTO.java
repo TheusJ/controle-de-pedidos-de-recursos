@@ -1,6 +1,6 @@
-package com.matheus.controlepedidosrecursos.model;
+package com.matheus.controlepedidosrecursos.dto;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,16 +9,14 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "tb_item_solicitado")
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProdutoSolicitadoModel {
+public class ProdutoSolicitadoDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     private String nome;
@@ -30,6 +28,5 @@ public class ProdutoSolicitadoModel {
     private Long quantidades;
 
     @Positive(message = "Somente valores positivos")
-    private BigDecimal valorTotalProdutoSolicitacao;
-
+    private BigDecimal valorTotalSolicitacao;
 }

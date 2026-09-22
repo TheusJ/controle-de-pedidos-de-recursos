@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_relatorio")
@@ -23,4 +24,8 @@ public class RelatorioModel {
 
     @CreationTimestamp
     private LocalDateTime dataRelatorio;
+
+    @JoinColumn(name = "relatorios_produtos_solicitados_id")
+    @ManyToMany
+    List<ProdutoSolicitadoModel> relatoriosProdutosSolicitados;
 }

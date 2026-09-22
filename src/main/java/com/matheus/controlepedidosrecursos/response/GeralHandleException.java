@@ -23,8 +23,8 @@ public class GeralHandleException {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler(SoliciacaoIdInvalido.class)
-    public ResponseEntity<?> solicitacaoIdInvalidoHandle(SoliciacaoIdInvalido exception){
+    @ExceptionHandler(SolicitacaoIdNaoEncontradoException.class)
+    public ResponseEntity<?> solicitacaoIdNaoEncontradoHandle(SolicitacaoIdNaoEncontradoException exception){
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.NOT_FOUND);
         response.put("timestamp", LocalDateTime.now());
@@ -65,6 +65,26 @@ public class GeralHandleException {
 
     @ExceptionHandler(EmailJaExistenteException.class)
     public ResponseEntity<?> emailJaExistenteHandle(EmailJaExistenteException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST);
+        response.put("timestamp", LocalDateTime.now());
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(SetorSemSolicitacaoException.class)
+    public ResponseEntity<?> setorSemSolicitacaoHandle(SetorSemSolicitacaoException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST);
+        response.put("timestamp", LocalDateTime.now());
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(SolicitacaoBuscaNaoAutorizada.class)
+    public ResponseEntity<?> solicitacaoNaoAutorizadaHandle(SolicitacaoBuscaNaoAutorizada exception){
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST);
         response.put("timestamp", LocalDateTime.now());

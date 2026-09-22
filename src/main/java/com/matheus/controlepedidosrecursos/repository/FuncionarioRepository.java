@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface FuncionarioRepository extends JpaRepository<FuncionarioModel, Long> {
     boolean existsByCpf(String cpf);
     boolean existsByEmail(String email);
+
+    Long id(Long id);
 }

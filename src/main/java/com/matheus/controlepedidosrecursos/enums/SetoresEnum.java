@@ -1,8 +1,8 @@
 package com.matheus.controlepedidosrecursos.enums;
 
 public enum SetoresEnum {
-    OPERACAO("OPERAÇÃO"),
-    DOCUMENTACAO("DOCUMENTAÇÃO"),
+    OPERACAO("OPERACO"),
+    DOCUMENTACAO("DOCUMENTACAO"),
     FINANCEIRO("FINANCEIRO"),
     COMERCIAL("COMERCIAL"),
     JURIDICO("JURIDICO"),
