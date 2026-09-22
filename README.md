@@ -70,3 +70,8 @@ Ou seja, possa ser que de tempos em tempos terá uma nova atualização na docum
 - Os demais cargos visualizam apenas as suas próprias solicitações.
 
 > Erros de validação e de regra de negócio são tratados globalmente (`GlobalExceptionHandler`) e retornam uma resposta de erro padronizada.
+
+
+# Atualizações 
+
+Aqui ficará marcada em datas, especificações, e o que, referente a atualizações e novas funcionalidades durante todo o desenvolvimento.
