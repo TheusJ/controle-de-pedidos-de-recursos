@@ -72,6 +72,10 @@ Ou seja, possa ser que de tempos em tempos terá uma nova atualização na docum
 > Erros de validação e de regra de negócio são tratados globalmente (`GlobalExceptionHandler`) e retornam uma resposta de erro padronizada.
 
 
-# Atualizações 
+# Atualizações do Projeto
 
-Aqui ficará marcada em datas, especificações, e o que, referente a atualizações e novas funcionalidades durante todo o desenvolvimento.
+Acompanhe o histórico de desenvolvimento, especificações e novas funcionalidades implementadas ao longo do tempo.
+
+| Data | Versão | Tipo | Descrição da Atualização |
+| :---: | :---: | :---: | :--- |
+| **00/00/0000** | `v1.1.0` | ✨ Initial | Estrutura completa da aplicação com Controllers, Services, Repositories, DTOs, mapeamento de Entidades e configuração do banco de dados |
