@@ -78,4 +78,4 @@ Acompanhe o histórico de desenvolvimento, especificações e novas funcionalida
 
 | Data | Versão | Tipo | Descrição da Atualização |
 | :---: | :---: | :---: | :--- |
-| **00/00/0000** | `v1.1.0` | ✨ Initial | Estrutura completa da aplicação com Controllers, Services, Repositories, DTOs, mapeamento de Entidades e configuração do banco de dados |
+| **19/09/2026,** | `v1.1.0` | ✨ Initial | Estrutura completa da aplicação com Controllers, Services, Repositories, DTOs, mapeamento de Entidades e configuração do banco de dados |
