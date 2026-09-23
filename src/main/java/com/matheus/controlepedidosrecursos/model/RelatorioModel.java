@@ -26,6 +26,6 @@ public class RelatorioModel {
     private LocalDateTime dataRelatorio;
 
     @JoinColumn(name = "relatorios_produtos_solicitados_id")
-    @ManyToMany
+    @OneToMany
     List<ProdutoSolicitadoModel> relatoriosProdutosSolicitados;
 }
