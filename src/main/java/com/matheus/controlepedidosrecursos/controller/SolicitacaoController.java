@@ -48,11 +48,13 @@ public class SolicitacaoController {
     }
 
     @PutMapping("/{idSolicitacao}/{idFuncionario}")
+    @Operation(summary = "Alterar solicitação", description = "Alterar Solicitação. Usuário só podem atualizar suas próprias solicitações. Usuários com Cargo 'RH' ou 'COMPRADOR' podem alterar qualquer solicitação. Lança exceptions se uma dessas regras não forem de acordo.")
     public ResponseEntity<SolicitacaoDTO> alterarSolicitacao(@PathVariable Long idSolicitacao, @PathVariable Long idFuncionario, @RequestBody SolicitacaoDTO solicitacaoDTOAlterar){
 
-        SolicitacaoDTO solicitacaoEncontrado = solicitacaoService(idSolicitacao, idFuncionario);
+        SolicitacaoDTO solicitacaoEncontrado = solicitacaoService.alterarSolicitacao(idSolicitacao, idFuncionario, solicitacaoDTOAlterar);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(solicitacaoEncontrado);
+
     }
 }

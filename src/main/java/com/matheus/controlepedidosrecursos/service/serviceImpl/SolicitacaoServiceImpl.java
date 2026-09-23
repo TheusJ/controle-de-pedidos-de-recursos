@@ -1,5 +1,6 @@
 package com.matheus.controlepedidosrecursos.service.serviceImpl;
 
+import com.matheus.controlepedidosrecursos.dto.FuncionarioDTO;
 import com.matheus.controlepedidosrecursos.dto.ProdutoSolicitadoDTO;
 import com.matheus.controlepedidosrecursos.dto.SolicitacaoDTO;
 import com.matheus.controlepedidosrecursos.enums.StatusSolicitacaoEnum;
@@ -12,6 +13,7 @@ import com.matheus.controlepedidosrecursos.repository.FuncionarioRepository;
 import com.matheus.controlepedidosrecursos.repository.ProdutoSolicitadoRepository;
 import com.matheus.controlepedidosrecursos.repository.SolicitacaoRepository;
 import com.matheus.controlepedidosrecursos.service.SolicitacaoService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +54,6 @@ public class SolicitacaoServiceImpl implements SolicitacaoService {
                 .build();
 
 
-
         BigDecimal valorSolicitacaoTotal = BigDecimal.ZERO;
 
         for (ProdutoSolicitadoModel produtos : solicitacaoModel.getProdutosSolicitados()) {
@@ -63,14 +64,12 @@ public class SolicitacaoServiceImpl implements SolicitacaoService {
             produtos.setValorTotalProdutoSolicitacao(valorProdutoTotal);
 
 
-
             valorSolicitacaoTotal = valorSolicitacaoTotal.add(valorProdutoTotal);
 
 
         }
 
         solicitacaoModel.setValorTotalSolicitacao(valorSolicitacaoTotal);
-
 
 
         List<ProdutoSolicitadoModel> produtoSolicitadoSalvo = produtoSolicitadoRepositoryRepository.saveAll(solicitacaoModel.getProdutosSolicitados());
@@ -141,9 +140,41 @@ public class SolicitacaoServiceImpl implements SolicitacaoService {
 
     }
 
+
     @Override
     public SolicitacaoDTO alterarSolicitacao(Long idSolicitacao, Long idFuncionario, SolicitacaoDTO solicitacaoDTO) {
         SolicitacaoModel solicitacaoEncontrado = solicitacaoRepository.findById(idSolicitacao).orElseThrow(() -> new SolicitacaoIdNaoEncontradoException("ID - Solicitação não encontrado"));
+        FuncionarioModel funcionarioEncontrado = funcionarioRepository.findById(idFuncionario).orElseThrow(() -> new FuncionarioIdInvalidoException("ID - Funcionário não encontrado!"));
 
+
+        if (!funcionarioEncontrado.getCargo().equals(TipoCargoEnum.RH) && !funcionarioEncontrado.getCargo().equals(TipoCargoEnum.COMPRADOR) && !solicitacaoEncontrado.getFuncionarioSolicitacao().getCargo().equals(funcionarioEncontrado.getCargo())) {
+            throw new SolicitacaoBuscaNaoAutorizada("Busca não autorizada!");
+        }
+
+        SolicitacaoModel solicitacaoAtualizada = SolicitacaoModel.builder()
+                .id(idSolicitacao)
+                .dataSolicitacao(LocalDateTime.now())
+                .setorSolicitacao(solicitacaoDTO.getSetorSolicitacao())
+                .statusSolicitacao(solicitacaoDTO.getStatusSolicitacao())
+                .produtosSolicitados(solicitacaoDTO.getProdutosSolicitados())
+                .dataCancelamento(solicitacaoDTO.getDataCancelamento())
+                .funcionarioSolicitacao(funcionarioEncontrado)
+                .valorTotalSolicitacao(solicitacaoDTO.getValorTotalSolicitacao())
+                .build();
+
+        SolicitacaoModel solicitacaoModelSalva = solicitacaoAtualizada;
+
+        SolicitacaoDTO solicitacaoAtualizadaDTO = SolicitacaoDTO.builder()
+                .id(solicitacaoAtualizada.getId())
+                .dataSolicitacao(LocalDateTime.now())
+                .setorSolicitacao(solicitacaoAtualizada.getSetorSolicitacao())
+                .statusSolicitacao(solicitacaoAtualizada.getStatusSolicitacao())
+                .produtosSolicitados(solicitacaoAtualizada.getProdutosSolicitados())
+                .dataCancelamento(solicitacaoAtualizada.getDataCancelamento())
+                .funcionarioSolicitacao(funcionarioEncontrado)
+                .valorTotalSolicitacao(solicitacaoAtualizada.getValorTotalSolicitacao())
+                .build();
+
+        return solicitacaoAtualizadaDTO;
     }
 }

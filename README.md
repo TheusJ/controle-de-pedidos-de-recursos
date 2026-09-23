@@ -42,6 +42,7 @@ A API é documentada com **OpenAPI 3** usando o [springdoc-openapi](https://spri
 | `POST` | `/api/v1/solicitacao/{funcionarioId}` | Solicitar Recursos |
 | `GET` | `/api/v1/solicitacao?idSolicitacao=&idFuncionario=` | Buscar Solicitação por ID |
 | `GET` | `/api/v1/solicitacao/{idFuncionario}` | Buscar todas as Solicitações |
+| `PUT` | `/api/v1/solicitacao/{idSolicitacao}/{idFuncionario}` | Altera Solicitação |
 
 ### Regras de negócio documentadas
 
@@ -78,4 +79,23 @@ Acompanhe o histórico de desenvolvimento, especificações e novas funcionalida
 
 | Data | Versão | Tipo | Descrição da Atualização |
 | :---: | :---: | :---: | :--- |
-| **19/09/2026,** | `v1.1.0` | ✨ Initial | Estrutura completa da aplicação com Controllers, Services, Repositories, DTOs, mapeamento de Entidades e configuração do banco de dados |
+| **19/09/2026** | `v1.1.0` | ✨ Initial | Estrutura completa da aplicação com Controllers, Services, Repositories, DTOs, mapeamento de Entidades e configuração do banco de dados |
+| **22/09/2026** | `v1.1.0` | feat | Funcionalidade - Alterar Solicitação |
+
+
+# Testes automatizados
+
+O projeto vem sendo atualizado com testes automatizados.
+Com o tempo terei mais testes.
+
+### Porque testes automatizados
+
+Bom, primeiramente para estudos e parender mais sobre **JUnit 5** e **Mockito**.
+Além de se só para estudos, mas entender o porque é feito dessa forma e o porque
+tem que ter testes automatizados.
+
+## Alteração de Solicitação
+
+- Retorno dos dados quando a alteração é feita com todos os parâmetros válidos.
+- Regra de autorização: apenas funcinários *RH*, *COMPRADOR*, ou o próprio solicitante dono da requisição.
+- Validação de que a Exception `SolicitacaoBuscaNaoAutorizada` é lançada quando um usuário sem permissão tenta alterar solicitação de outro colaborador.

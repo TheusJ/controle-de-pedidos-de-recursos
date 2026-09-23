@@ -1,10 +1,10 @@
 package com.matheus.controlepedidosrecursos.service.serviceImpl;
 
+import com.matheus.controlepedidosrecursos.dto.SolicitacaoDTO;
 import com.matheus.controlepedidosrecursos.enums.SetoresEnum;
 import com.matheus.controlepedidosrecursos.enums.StatusSolicitacaoEnum;
 import com.matheus.controlepedidosrecursos.enums.TipoCargoEnum;
-import com.matheus.controlepedidosrecursos.exception.FuncionarioIdInvalidoException;
-import com.matheus.controlepedidosrecursos.exception.SolicitacaoIdNaoEncontradoException;
+import com.matheus.controlepedidosrecursos.exception.SolicitacaoBuscaNaoAutorizada;
 import com.matheus.controlepedidosrecursos.model.FuncionarioModel;
 import com.matheus.controlepedidosrecursos.model.ProdutoSolicitadoModel;
 import com.matheus.controlepedidosrecursos.model.SolicitacaoModel;
@@ -12,89 +12,87 @@ import com.matheus.controlepedidosrecursos.repository.FuncionarioRepository;
 import com.matheus.controlepedidosrecursos.repository.ProdutoSolicitadoRepository;
 import com.matheus.controlepedidosrecursos.repository.SolicitacaoRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
-@DisplayName("Deve retornar uma solicitação se todas as validações baterem corretamente. Deve retornar exceptions se houver alguns dos parametros incorretos.")
+@SpringBootTest
 class SolicitacaoServiceImplTest {
 
-    @Mock
-    FuncionarioRepository funcionarioRepository;
 
-    @Mock
+    @MockitoBean
     SolicitacaoRepository solicitacaoRepository;
 
-    @Mock
-    ProdutoSolicitadoRepository produtoSolicitadoRepository;
-
-
-
-    @InjectMocks
+    @Autowired
     SolicitacaoServiceImpl solicitacaoService;
 
+    @MockitoBean
+    ProdutoSolicitadoRepository produtoSolicitadoRepository;
+
+    @MockitoBean
+    FuncionarioRepository funcionarioRepository;
 
     @Test
-    @DisplayName("Deve retornar uma solicitação se todas as validações baterem corretamente. Deve retornar exceptions se houver alguns dos parametros incorretos.")
-    public void deveRetornarUmaSolicitacaoExistente(){
-        FuncionarioModel funcionarioTest = new FuncionarioModel(null, "Matheus José", "10953762416", "mathjjc72@gmail.com", TipoCargoEnum.RH);
+    void alterarSolicitacaoDeveRetornarUmaSolicitacaoAlteradaSeTodosOsParametrosForemCorretos() {
+        FuncionarioModel funcionarioModel1 = new FuncionarioModel(1L, "Matheus José", "10953762416", "mathjjc72@gmail.com", TipoCargoEnum.COMUM);
 
-        funcionarioRepository.save(funcionarioTest);
-        BigDecimal valorProduto = new BigDecimal(4.500);
-        BigDecimal valorTotalProduto = valorProduto.multiply(BigDecimal.valueOf(5L));
-        BigDecimal valorTotalSolicitacaoAcumuladorTest = BigDecimal.ZERO;
-        valorTotalSolicitacaoAcumuladorTest = valorTotalSolicitacaoAcumuladorTest.add(valorTotalProduto);
+        FuncionarioModel funcionarioModel2 = new FuncionarioModel(2L, "Matheus José", "68419417483", "marcos@gmail.com", TipoCargoEnum.RH);
 
+        FuncionarioModel funcionarioModel3 = new FuncionarioModel(3L, "Matheus José", "68419417483", "marcos@gmail.com", TipoCargoEnum.COMPRADOR);
 
-        List<ProdutoSolicitadoModel> produtosTest = Arrays.asList(new ProdutoSolicitadoModel(null,"Notebook", valorProduto, 5L, valorTotalProduto));
-
-
-
-        SolicitacaoModel solicitacaoTeste = new SolicitacaoModel(null, funcionarioTest, LocalDateTime.now(), SetoresEnum.FINANCEIRO, StatusSolicitacaoEnum.PENDENTE, null, produtosTest, null, valorTotalSolicitacaoAcumuladorTest);
-
-
-
-
-
-    }
-
-    @Test
-    public void deveRetornarUmaExceptionSeCasoNaoForOSolicitanteODonoDaSlicitacaoBuscadaOuQueNaoSejaDeCargoRhOuCompradorTest(){
-
-        FuncionarioModel funcionarioTest = new FuncionarioModel(null, "Matheus José", "10953762416", "mathjjc72@gmail.com", TipoCargoEnum.COMUM);
-        funcionarioRepository.save(funcionarioTest);
         BigDecimal valorProduto = new BigDecimal(4500);
         BigDecimal valorTotalProduto = valorProduto.multiply(BigDecimal.valueOf(5L));
-        BigDecimal valorTotalSolicitacaoAcumuladorTest = BigDecimal.ZERO;
-        valorTotalSolicitacaoAcumuladorTest = valorTotalSolicitacaoAcumuladorTest.add(valorTotalProduto);
-
-        List<ProdutoSolicitadoModel> produtosTest = Arrays.asList(new ProdutoSolicitadoModel(null,"Notebook", valorProduto, 5L, valorTotalProduto));
-
-
-        SolicitacaoModel solicitacaoEsperada = new SolicitacaoModel(null, funcionarioTest, LocalDateTime.now(), SetoresEnum.FINANCEIRO, StatusSolicitacaoEnum.PENDENTE, null, produtosTest, null, valorTotalSolicitacaoAcumuladorTest);
 
 
 
+        List<ProdutoSolicitadoModel> produtosFuncionario = List.of(new ProdutoSolicitadoModel(1L, "Notebook", valorProduto, 5L, valorTotalProduto), new ProdutoSolicitadoModel(2L, "Computador", valorProduto, 1L, valorTotalProduto));
+
+        List<ProdutoSolicitadoModel> produtosFuncionario2 = List.of(new ProdutoSolicitadoModel(3L, "Notebook", valorProduto, 5L, valorTotalProduto), new ProdutoSolicitadoModel(4L, "Computador", valorProduto, 1L, valorTotalProduto));
+
+        List<ProdutoSolicitadoModel> produtosFuncionario3 = List.of(new ProdutoSolicitadoModel(5L, "Notebook", valorProduto, 5L, valorTotalProduto), new ProdutoSolicitadoModel(6L, "Computador", valorProduto, 1L, valorTotalProduto));
+
+        BigDecimal valorTotalSolicitacao = valorTotalProduto.multiply(valorProduto);
+
+
+        SolicitacaoModel solicitacao1 = new SolicitacaoModel(1L,funcionarioModel1, LocalDateTime.now(), SetoresEnum.DOCUMENTACAO, StatusSolicitacaoEnum.PENDENTE, null,  produtosFuncionario, null, valorTotalSolicitacao);
+
+        SolicitacaoModel solicitacao2 = new SolicitacaoModel(2L,funcionarioModel2, LocalDateTime.now(), SetoresEnum.DOCUMENTACAO, StatusSolicitacaoEnum.PENDENTE, null,  produtosFuncionario2, null, valorTotalSolicitacao);
+
+        SolicitacaoModel solicitacao3 = new SolicitacaoModel(3L,funcionarioModel3, LocalDateTime.now(), SetoresEnum.DOCUMENTACAO, StatusSolicitacaoEnum.PENDENTE, null,  produtosFuncionario2, null, valorTotalSolicitacao);
+
+        Mockito.when(this.solicitacaoRepository.findById(2L)).thenReturn(Optional.of(solicitacao2));
+        Mockito.when(this.funcionarioRepository.findById(1L)).thenReturn(Optional.of(funcionarioModel1));
 
 
 
+        SolicitacaoDTO solicitacaoDTO = SolicitacaoDTO.builder()
+                .id(solicitacao1.getId())
+                .setorSolicitacao(solicitacao1.getSetorSolicitacao())
+                .valorTotalSolicitacao(solicitacao1.getValorTotalSolicitacao())
+                .funcionarioSolicitacao(solicitacao1.getFuncionarioSolicitacao())
+                .build();
 
-        when(solicitacaoRepository.findById(1L)).thenReturn(Optional.of(solicitacaoEsperada));
-        when(funcionarioRepository.findById(1L)).thenReturn(Optional.of(funcionarioTest));
+        SolicitacaoDTO solicitacaoDTOTeste = SolicitacaoDTO.builder()
+                .id(solicitacao2.getId())
+                .setorSolicitacao(solicitacao2.getSetorSolicitacao())
+                .valorTotalSolicitacao(solicitacao2.getValorTotalSolicitacao())
+                .funcionarioSolicitacao(solicitacao2.getFuncionarioSolicitacao())
+                .build();
 
-        Assertions.assertThrows(SolicitacaoIdNaoEncontradoException.class, () -> solicitacaoService.buscarSolicitacao(1L, 1L));
+
+//        SolicitacaoDTO solicitation2 = this.solicitacaoService.alterarSolicitacao(1L, 1L, solicitacaoDTOTeste);
+        SolicitacaoDTO solicitacao = this.solicitacaoService.alterarSolicitacao(2L, 1L, solicitacaoDTOTeste);
+
+
+
+        Assertions.assertEquals(2L, 1L, solicitacao.getId());
+
     }
-
 }

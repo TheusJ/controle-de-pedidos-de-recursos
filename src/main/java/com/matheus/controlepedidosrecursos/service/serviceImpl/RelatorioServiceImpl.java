@@ -32,5 +32,7 @@ public class RelatorioServiceImpl implements RelatorioService {
         if(funcionarioEncontrado.getCargo() != TipoCargoEnum.RH){
             throw new FuncionarioSemAutorizacaoException("Você não tem autorização!");
         }
+
+        return null;
     }
 }
